@@ -1,0 +1,243 @@
+// Magma code and data related to "Genus-0-Modular-curves-over-higher-number-fields",
+// by Rakvi.
+
+
+// list of prime power level genus 0 congruence groups upto conjugation in PGL_2(Z)
+
+CongSubgroupprimepower := recformat<N:RngIntElt, b:RngIntElt, label:MonStgElt, gens:SeqEnum, index:RngIntElt, H:GrpMat, hauptmodul, h:RngSerPuisElt, J:FldFunRatUElt,sub :SeqEnum, sup :SeqEnum>;
+Genus0primepower:=recformat<N:RngIntElt, b:RngIntElt, label:MonStgElt, gens:SeqEnum, index:RngIntElt, H:GrpMat, hauptmodul, h:RngSerPuisElt, J:FldFunRatUElt,sub :SeqEnum, sup :SeqEnum>;
+/* Record for a congruence subgroup Gamma of genus 0.
+   N:              level of Gamma
+   b:              Upper bound on the level for checking cocycles
+   label:          label of Gamma given by Cummin and Pauli (describes Gamma up to conjugacy in PGL_2(Z).
+   H:              image of Gamma in SL_2(Z/NZ).
+   gens:           generators for subgroup H of SL_2(Z/NZ).
+   index:          index of Gamma in SL_2(Z).
+                      the first cusp will be the one at infinity.
+   hauptmodul:     An abstract description of a hauptmodul for Gamma.  It is in one of the following forms:
+                   1) A sequence of records of type SiegelPower; represents the product of those Siegel powers.
+                   2) A sequence of sequence as in (1); represents the sum of products of Siegel powers.
+
+   h:              q-expansion for the hauptmodul.   
+   J:              rational function such that J(h) is the modular j-invariant.
+   
+   sub:            is a list of genus 0 congruence subgroups of Gamma (not necessarily of prime power level) that have minimal index in Gamma.
+   
+
+*/
+   
+
+            
+
+load "Genus 0 Congruence Subgroups.m";
+load "Rational Functions.m";
+load "Hauptmodul and J(t).m";
+
+SetOutputFile("temp":Overwrite:=true);
+CPlistprimepower:=AssociativeArray();     
+
+CPlistprimepower["1A"]:= rec<CongSubgroupprimepower | N:=1,  label:="1A", gens:=[ ], index:=1>;
+
+CPlistprimepower["3A"]:= rec<CongSubgroupprimepower | N:=3,  label:="3A", gens:=[ [ 0, 1, 2, 0 ] , [ 0, 2, 1, 0 ] , [ 1, 2, 2, 2 ] , [ 2, 0, 0, 2 ]  ], index:=3, sub:=["3C"]>;
+CPlistprimepower["3B"]:= rec<CongSubgroupprimepower | N:=3,  label:="3B", gens:=[[ 0, 2, 1, 2 ] , [ 1, 2, 1, 0 ] , [ 2, 0, 0, 2 ] , [ 2, 1, 2, 0 ]  ], index:=4>;
+CPlistprimepower["3C"]:= rec<CongSubgroupprimepower | N:=3,  label:="3C", gens:=[[ 2, 0, 0, 2 ] , [ 2, 1, 1, 1 ] ], index:=6>;
+CPlistprimepower["3D"]:= rec<CongSubgroupprimepower | N:=3,  label:="3D", gens:=[[ 2, 0, 0, 2 ] ], index:=12>;
+
+
+CPlistprimepower["9A"]:= rec<CongSubgroupprimepower | N:=9,  label:="9A", gens:=[[ 0, 1, 8, 0 ] , [ 1, 7, 1, 8 ] , [ 2, 6, 6, 5 ] , [ 7, 0, 0, 4 ] , [ 7, 6, 6, 4 ] ], index:=9,sub:=["9D"]>;
+CPlistprimepower["9B"]:= rec<CongSubgroupprimepower | N:=9,  label:="9B", gens:=[[ 4, 0, 6, 7 ] , [ 7, 0, 6, 4 ] , [ 7, 0, 8, 4 ] , [ 8, 0, 0, 8 ] ], index:=12>;
+CPlistprimepower["9C"]:= rec<CongSubgroupprimepower | N:=9,  label:="9C", gens:=[[ 1, 3, 2, 7 ] , [ 4, 0, 6, 7 ] , [ 7, 0, 6, 4 ] , [ 8, 0, 0, 8 ] ], index:=12>;
+CPlistprimepower["9D"]:= rec<CongSubgroupprimepower | N:=9,  label:="9D", gens:=[[  0, 1, 8, 0 ] , [ 4, 6, 6, 7 ] , [ 5, 3, 3, 2 ] , [ 7, 0, 0, 4 ] ], index:=18>;
+CPlistprimepower["9E"]:= rec<CongSubgroupprimepower | N:=9,  label:="9E", gens:=[[ 0, 1, 8, 0 ] , [ 4, 6, 3, 7 ] , [ 7, 0, 0, 4 ] , [ 8, 0, 0, 8 ] ], index:=18>;
+CPlistprimepower["9F"]:= rec<CongSubgroupprimepower | N:=9,  label:="9F", gens:=[ [ 0, 1, 8, 0 ] , [ 0, 8, 1, 0 ] , [ 1, 3, 2, 7 ] , [ 4, 1, 1, 5 ] , [ 8, 0, 0, 8 ]  ], index:=27>;
+CPlistprimepower["9G"]:= rec<CongSubgroupprimepower | N:=9,  label:="9G", gens:=[[ 0, 1, 8, 0 ] , [ 1, 7, 1, 8 ] , [ 4, 6, 6, 7 ] , [ 5, 3, 3, 2 ] ], index:=27>;
+CPlistprimepower["9H"]:= rec<CongSubgroupprimepower | N:=9,  label:="9H", gens:=[[ 4, 0, 0, 7 ] , [ 4, 3, 6, 7 ] , [ 8, 0, 0, 8 ] ], index:=36>;
+CPlistprimepower["9I"]:= rec<CongSubgroupprimepower | N:=9,  label:="9I", gens:=[[ 1, 0, 6, 1 ] , [ 7, 0, 5, 4 ] , [ 8, 0, 0, 8 ] ] , index:=36>;
+CPlistprimepower["9J"]:= rec<CongSubgroupprimepower | N:=9,  label:="9J", gens:=[[ 1, 0, 6, 1 ] , [ 1, 3, 2, 7 ] , [ 8, 0, 0, 8 ] ] , index:=36>;
+ 
+CPlistprimepower["27A"]:= rec<CongSubgroupprimepower | N:=27,  label:="27A", gens:=[[ 1, 0, 18, 1 ] , [ 10, 0, 0, 19 ] , [ 10, 0, 24, 19 ] , [ 13, 9, 1, 7 ] , [ 16, 18, 25, 13 ] , [ 26, 0, 0, 26 ]  ], index:=36>;
+
+
+
+keys:=[k: k in Keys(CPlistprimepower)];
+level:=[CPlistprimepower[k]`N:k in keys];
+ParallelSort(~level,~keys);
+
+// For a congruence subgroup in our list, we compute the upper bound on number of cocycles as mentioned in lemma 5.1
+for k in keys do;
+	if k eq "1A" then continue; end if;
+   
+	
+    Gamma:=CPlistprimepower[k];
+    SL2:=SL(2,Integers(Gamma`N));
+    H:=sub<SL2|[g:g in Gamma`gens]>;
+    N:= Normalizer(SL2,H);
+    N1:=quo<N|H>;
+    s:=[];
+    for n in N1 do;
+        x:=0;
+        t:=Factorisation(Order(n));
+        // checking if for every p|Order(n) does p|N
+        for p in t do;
+            if Gamma`N mod p[1] eq 0 then x:=x+1; end if;
+        end for;
+        if x eq #t then s:=s cat [Order(n)];end if;
+    end for;
+    
+    
+    Gamma`b:=Lcm(s);
+    
+    CPlistprimepower[k]:=Gamma;
+    
+ end for;   
+
+// For a congruence subgroup Gamma, we now compute the pairs (P^1_K, JG) such that it is isomorphic to a modular curve (X_G,pi_G) 
+where G \intersect \SL_2(Z) is conjugate to Gamma and X_G is defined over a number field other than Q
+
+for k in keys do;
+    
+    if k eq "1A" then continue; end if;
+   Write("temp",k);
+
+   Gamma:=CPlistprimepower[k];
+   Write("temp","b");Write("temp",Gamma`b);
+    N := Gamma`N; 
+    L := CyclotomicField(N);
+    L1:=CyclotomicField(N*Gamma`b);
+    S<t> := FunctionField(L1); 
+    J := CPlist[k]`J;
+    J := S!J;Write("temp","J_gamma");Write("temp",J);
+    T:=Subfields(L);
+    for K in T do;
+	Write("temp",K);
+    G,iota,sigma:=AutomorphismGroup(L1,K[1]);if #G eq 1 then continue;end if;
+    
+    R := MatrixRing(L1,2); 
+    action := hom< G -> Aut(R) | g :-> iso< R -> R | n :-> [sigma(g)(n[1,1]),sigma(g)(n[1,2]),sigma(g)(n[2,1]),sigma(g)(n[2,2])] > >; 
+    Ggens:=Generators(G);for l in Ggens do; if Order(l) eq #G then g:=l;break;end if;end for;
+    C := AssociativeArray(); 
+    n:=1; 
+	if SameRationalParametrization(SigmaJ(J,g,L1,K[1]),J,L1) eq false then 
+            C[g]:={}; 
+            n:=0; 
+        else 
+            _,C[g]:=SameRationalParametrization(SigmaJ(J,g,L1,K[1]),J,L1);
+            n:=n*#C[g]; 
+        end if; 
+
+       
+    
+    if n eq 0 then  
+	continue;
+    end if; 
+
+    M :={}; 
+
+    while #M ne n do; 
+
+        xi :=[g->S!Random(C[g])]; 
+        M:= M join {xi}; 
+
+    end while; 
+    
+    Setcoc:={}; 
+
+    m1 := map< MatrixRing(L1,2) -> MatrixRing(L1,3) | n :-> (1/Determinant(n))*Matrix(3,3,[n[1,1]^2,2*n[1,1]*n[1,2],n[1,2]^2,n[1,1]*n[2,1],n[1,1]*n[2,2]+n[1,2]*n[2,1],n[1,2]*n[2,2],n[2,1]^2,2*n[2,1]*n[2,2],n[2,2]^2])>;  
+
+   
+
+     for m in M do; 
+	
+        xi0:=AssociativeArray(); 
+        for i in [1..Order(g)] do; 
+            if i eq 1 then 
+
+                xi0[1]:=R![Evaluate(Numerator(m[1][2])-Evaluate(Numerator(m[1][2]),0),1),Evaluate(Numerator(m[1][2]),0),Evaluate(Denominator(m[1][2])-Evaluate(Denominator(m[1][2]),0),1),Evaluate(Denominator(m[1][2]),0)]; 
+
+            else 
+
+                xi0[i]:=R!((xi0[1])*(action(g)(xi0[i-1]))); 
+            end if; 
+
+         end for; 
+
+        xi:=map<G-> MatrixRing(L1,3) |[(g)^i-> m1(xi0[i]):i in [1..Order(g)]]>; 
+        if check(xi,L1,K[1]) eq true then  
+            Setcoc:=Setcoc join {xi}; 
+         end if; 
+
+    end for; 
+    countercoc:=0;
+    for phi in Setcoc do;
+        countercoc:=countercoc+1;
+        A := H90(3,L1,K[1],G,sigma,phi);  
+        D := Matrix(3,3,[0,0,-1/2,0,1,0,-1/2,0,0]); // this is the matrix corresponding to y^2-xz 
+        Q0 := Conic(D); 
+        Q,_ := Conic(Transpose(A^(-1))*D*A^(-1)); 
+        Q := ChangeRing(Q,K[1]);  
+        if HasRationalPoint(Q) eq false then 
+		Write("temp", "A nontrivial cocycle");
+            continue; 
+        else
+           Write("temp", " A trivial cocycle");
+            xi := map<G -> MatrixRing(L1,2) | [g->m2(phi(g),L1):g in G]>;
+            G2:= CartesianProduct(G,G);
+            mu := map<G2 -> MatrixRing(L1,2) | x :-> (xi(x[1]))*(action(x[1])(xi(x[2])))*((xi(x[1]*x[2]))^(-1))>;
+            a := Matrix(L1,2,2,[1,0,0,1]);
+            
+            for i in [0 .. Order(g)-1] do;
+               a := a * mu(g^i,g);
+            end for;
+
+            a := a^(-1);
+            //a;
+            //Write("temp",a[1,1]);Write("temp",#G);
+	   if a[1,1] in Rationals() then
+		num:=Numerator(a[1,1]);den:=Denominator(a[1,1]);num:=Integers()!num;den:=Integers()!den;
+		b1,p1:=IsPower(num,#G);b2,p2:=IsPower(den,#G);
+		if b1 eq true and b2 eq true then a1:=p1/p2;
+			a1:=K[1]!a1;
+		
+	  	else
+           		b,a2:=NormEquation(RelativeField(K[1],L1),a[1,1]);    // Note: a is scalar matrix
+            		assert b eq true;
+	   		a1:=a2[1];	
+	   	end if;
+	  else
+		b,a2:=NormEquation(RelativeField(K[1],L1),a[1,1]);    // Note: a is scalar matrix
+            		assert b eq true;
+	   		a1:=a2[1];	
+	   	end if;
+
+	   //print "a1";//Write("temp",a1);
+            f := [];
+            for i in [1 .. Order(g)] do;
+               temp := L1 ! 1;
+               for j in [0 .. (i-1)] do;
+                  temp := temp * ((mu(g^j,g)[1,1])*(sigma(g^j)(a1)));
+               end for;
+		//temp;
+               f := f cat [mu(g^i,Id(G))[1,1]/temp];
+	
+            end for;
+            psi:= map<G-> MatrixRing(L1,2) | [g^i -> xi(g^i)/f[i] : i in [1..Order(g)]]>;
+            C:=H90(2,L1,K[1],G,sigma,psi);
+            C := C^(-1); 
+            funcg := (C[1,1]*t+C[1,2])/(C[2,1]*t+C[2,2]); 
+            JG:=Evaluate(J,funcg);Write("temp",JG);Write("temp",C);
+	                    for i in [1..Gamma`b] do;
+                    if C in MatrixRing(CyclotomicField((Gamma`N)*i),2) then
+                                 Write("temp","level");Write("temp",(Gamma`N)*i);               
+                    else continue;
+                    end if;
+                    break;
+		    end for;
+            //assert JG in FunctionField(K[1]) eq true;
+         end if;
+     end for;
+  end for;
+end for;
+   
+
+ 
+

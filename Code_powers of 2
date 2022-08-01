@@ -1,0 +1,378 @@
+// Magma code and data related to "Genus-0-Modular-curves-over-higher-number-fields",
+// by Rakvi.
+
+
+// list of prime power level genus 0 congruence groups upto conjugation in PGL_2(Z)
+
+CongSubgroupprimepower := recformat<N:RngIntElt, b:RngIntElt, label:MonStgElt, gens:SeqEnum, index:RngIntElt, H:GrpMat, hauptmodul, h:RngSerPuisElt, J:FldFunRatUElt,sub :SeqEnum, sup :SeqEnum>;
+Genus0primepower:=recformat<N:RngIntElt, b:RngIntElt, label:MonStgElt, gens:SeqEnum, index:RngIntElt, H:GrpMat, hauptmodul, h:RngSerPuisElt, J:FldFunRatUElt,sub :SeqEnum, sup :SeqEnum>;
+/* Record for a congruence subgroup Gamma of genus 0.
+   N:              level of Gamma
+   b:              Upper bound on the level for checking cocycles
+   label:          label of Gamma given by Cummin and Pauli (describes Gamma up to conjugacy in PGL_2(Z).
+   H:              image of Gamma in SL_2(Z/NZ).
+   gens:           generators for subgroup H of SL_2(Z/NZ).
+   index:          index of Gamma in SL_2(Z).
+                      the first cusp will be the one at infinity.
+   hauptmodul:     An abstract description of a hauptmodul for Gamma.  It is in one of the following forms:
+                   1) A sequence of records of type SiegelPower; represents the product of those Siegel powers.
+                   2) A sequence of sequence as in (1); represents the sum of products of Siegel powers.
+
+   h:              q-expansion for the hauptmodul.   
+   J:              rational function such that J(h) is the modular j-invariant.
+   
+   sub:            is a list of genus 0 congruence subgroups of Gamma (not necessarily of prime power level) that have minimal index in Gamma.
+   
+
+*/
+   
+
+            
+
+load "Genus 0 Congruence Subgroups.m";
+load "Rational Functions.m";
+load "Hauptmodul and J(t).m";
+SetOutputFile("temp":Overwrite:=true);
+CPlistprimepower:=AssociativeArray();     
+
+CPlistprimepower["1A"]:= rec<CongSubgroupprimepower | N:=1,  label:="1A", gens:=[ ], index:=1>;
+
+CPlistprimepower["2A"]:= rec<CongSubgroupprimepower | N:=2,  label:="2A", gens:=[ [1,1,1,0] ], index:=2, sub:=["2C"]>;
+CPlistprimepower["2B"]:= rec<CongSubgroupprimepower | N:=2,  label:="2B", gens:=[ [0,1,1,0] ], index:=3>;
+CPlistprimepower["2C"]:= rec<CongSubgroupprimepower | N:=2,  label:="2C", gens:=[ [1,0,0,1] ], index:=6>;
+
+
+CPlistprimepower["4A"]:= rec<CongSubgroupprimepower | N:=4,  label:="4A", gens:=[[ 0, 1, 3, 0 ] , [ 1, 1, 1, 2 ] , [ 3, 0, 0, 3 ] ], index:=4,sub:=["4D"]>;
+CPlistprimepower["4B"]:= rec<CongSubgroupprimepower | N:=4,  label:="4B", gens:=[[ 0, 1, 3, 2 ] , [ 1, 2, 2, 1 ] , [ 2, 1, 3, 0 ] , [ 3, 2, 2, 3 ] ], index:=6>;
+CPlistprimepower["4C"]:= rec<CongSubgroupprimepower | N:=4,  label:="4C", gens:=[[ 0, 1, 3, 0 ] , [ 1, 2, 2, 1 ] , [ 2, 1, 3, 2 ] , [ 3, 2, 2, 3 ] ], index:=6>;
+CPlistprimepower["4D"]:= rec<CongSubgroupprimepower | N:=4,  label:="4D", gens:=[[ 1, 1, 1, 2 ] , [ 3, 0, 0, 3 ] ], index:=8>;
+CPlistprimepower["4E"]:= rec<CongSubgroupprimepower | N:=4,  label:="4E", gens:=[[ 1, 2, 2, 1 ] , [ 3, 2, 2, 3 ] ], index:=12>;
+CPlistprimepower["4F"]:= rec<CongSubgroupprimepower | N:=4,  label:="4F", gens:=[[ 0, 1, 3, 0 ] , [ 3, 0, 0, 3 ] ], index:=12>;
+CPlistprimepower["4G"]:= rec<CongSubgroupprimepower | N:=4,  label:="4G", gens:=[ [ 3, 0, 0, 3 ] ], index:=24>;
+
+
+
+CPlistprimepower["8A"]:= rec<CongSubgroupprimepower | N:=8,  label:="8A", gens:=[[ 1, 4, 4, 1 ] , [ 4, 1, 7, 0 ] , [ 4, 3, 5, 4 ] , [ 5, 0, 4, 5 ] , [ 5, 4, 0, 5 ] , [ 6, 3, 7, 1 ] , [ 7, 0, 0, 7 ] ], index:=8,sub:=["8E"]>;
+CPlistprimepower["8B"]:= rec<CongSubgroupprimepower | N:=8,  label:="8B", gens:=[[ 0, 5, 3, 0 ] , [ 3, 6, 6, 7 ] , [ 5, 0, 0, 5 ] , [ 5, 4, 4, 5 ] , [ 7, 4, 4, 7 ] , [ 7, 6, 6, 3 ] ], index:=12>;
+CPlistprimepower["8C"]:= rec<CongSubgroupprimepower | N:=8,  label:="8C", gens:=[[ 1, 4, 4, 1 ] , [ 3, 0, 0, 3 ] , [ 4, 5, 3, 2 ] , [ 5, 4, 4, 5 ] , [ 7, 2, 6, 3 ] ], index:=12>;
+CPlistprimepower["8D"]:= rec<CongSubgroupprimepower | N:=8,  label:="8D", gens:=[[ 0, 5, 3, 0 ] , [ 5, 0, 0, 5 ] , [ 5, 4, 4, 5 ] , [ 7, 4, 4, 7 ] , [ 7, 6, 2, 3 ] ], index:=12>;
+CPlistprimepower["8E"]:= rec<CongSubgroupprimepower | N:=8,  label:="8E", gens:=[[ 1, 1, 5, 6 ] , [ 1, 4, 4, 1 ] , [ 5, 0, 4, 5 ] , [ 6, 3, 7, 1 ] , [ 7, 0, 0, 7 ] ], index:=16>;
+CPlistprimepower["8F"]:= rec<CongSubgroupprimepower | N:=8,  label:="8F", gens:=[ [ 0, 1, 7, 0 ] , [ 0, 3, 5, 0 ] , [ 2, 3, 3, 5 ] , [ 5, 0, 0, 5 ] , [ 7, 0, 0, 7 ] ], index:=16>;
+CPlistprimepower["8G"]:= rec<CongSubgroupprimepower | N:=8,  label:="8G", gens:=[[ 1, 2, 0, 1 ] , [ 1, 4, 0, 1 ] , [ 1, 6, 0, 1 ] , [ 3, 2, 0, 3 ] , [ 5, 4, 0, 5 ]  ], index:=24>;
+CPlistprimepower["8H"]:= rec<CongSubgroupprimepower | N:=8,  label:="8H", gens:=[[ 0, 5, 3, 0 ] , [ 1, 4, 4, 1 ] , [ 5, 0, 0, 5 ] , [ 7, 4, 4, 7 ] ], index:=24>;
+CPlistprimepower["8I"]:= rec<CongSubgroupprimepower | N:=8,  label:="8I", gens:=[[ 3, 2, 6, 7 ] , [ 4, 5, 3, 2 ] , [ 5, 4, 4, 5 ] , [ 5, 6, 2, 1 ] ] , index:=24>;
+CPlistprimepower["8J"]:= rec<CongSubgroupprimepower | N:=8,  label:="8J", gens:=[[ 1, 2, 4, 1 ] , [ 1, 4, 0, 1 ] , [ 1, 6, 4, 1 ] , [ 3, 2, 0, 3 ] , [ 5, 4, 4, 5 ] ] , index:=24>;
+CPlistprimepower["8K"]:= rec<CongSubgroupprimepower | N:=8,  label:="8K", gens:=[[ 0, 5, 3, 0 ] , [ 1, 0, 4, 1 ] , [ 1, 4, 4, 1 ] , [ 7, 4, 4, 7 ] ] , index:=24>;
+CPlistprimepower["8L"]:= rec<CongSubgroupprimepower | N:=8,  label:="8L", gens:=[[ 0, 7, 1, 0 ] , [ 3, 6, 6, 7 ] , [ 5, 4, 4, 5 ] , [ 7, 0, 0, 7 ] , [ 7, 2, 2, 3 ]  ] , index:=24>;
+CPlistprimepower["8M"]:= rec<CongSubgroupprimepower | N:=8,  label:="8M", gens:=[ [ 0, 1, 7, 0 ] , [ 2, 3, 3, 5 ] , [ 7, 0, 0, 7 ] ] , index:=32>;
+CPlistprimepower["8N"]:= rec<CongSubgroupprimepower | N:=8,  label:="8N", gens:=[ [ 1, 0, 4, 1 ] , [ 1, 4, 4, 1 ] , [ 7, 0, 0, 7 ] , [ 7, 4, 4, 7 ] ] , index:=48>;
+CPlistprimepower["8O"]:= rec<CongSubgroupprimepower | N:=8,  label:="8O", gens:=[ [ 1, 4, 0, 1 ] , [ 5, 6, 0, 5 ] , [ 7, 4, 0, 7 ]  ] , index:=48>;
+CPlistprimepower["8P"]:= rec<CongSubgroupprimepower | N:=8,  label:="8P", gens:=[ [ 0, 7, 1, 0 ] , [ 5, 4, 4, 5 ] , [ 7, 0, 0, 7 ] ] , index:=48>;
+
+
+CPlistprimepower["16A"]:= rec<CongSubgroupprimepower | N:=16,  label:="16A", gens:=[[ 1, 8, 8, 1 ] , [ 1, 9, 5, 14 ] , [ 1, 12, 4, 1 ] , [ 4, 5, 3, 4 ] , [ 9, 0, 8, 9 ] , [ 13, 0, 12, 5 ] , [ 14, 11, 7, 1 ] , [ 15, 8, 8, 15 ] ], index:=16,sub:=["16F"]>;
+CPlistprimepower["16B"]:= rec<CongSubgroupprimepower | N:=16,  label:="16B", gens:=[[ 1, 8, 8, 1 ] , [ 1, 10, 10, 5 ] , [ 2, 7, 13, 14 ] , [ 5, 4, 4, 13 ] , [ 9, 0, 0, 9 ] , [ 9, 8, 8, 9 ] , [ 11, 6, 6, 15 ] , [ 15, 0, 0, 15 ] , [ 15, 12, 12, 15 ] ], index:=24>;
+CPlistprimepower["16C"]:= rec<CongSubgroupprimepower | N:=16,  label:="16C", gens:=[[ 1, 8, 8, 1 ] , [ 1, 12, 12, 1 ] , [ 5, 4, 12, 13 ] , [ 6, 1, 7, 12 ] , [ 9, 0, 0, 9 ] , [ 9, 8, 8, 9 ] , [ 11, 2, 14, 7 ] , [ 13, 2, 6, 1 ] ], index:=24>;
+CPlistprimepower["16D"]:= rec<CongSubgroupprimepower | N:=16,  label:="16D", gens:=[[ 1, 8, 8, 1 ] , [ 1, 12, 4, 1 ] , [ 2, 9, 7, 0 ] , [ 5, 4, 12, 13 ] , [ 9, 0, 0, 9 ] , [ 9, 8, 8, 9 ] , [ 11, 2, 14, 7 ] , [ 13, 2, 14, 1 ] ], index:=24>;
+CPlistprimepower["16E"]:= rec<CongSubgroupprimepower | N:=16,  label:="16E", gens:=[[ 1, 8, 8, 1 ] , [ 4, 3, 5, 4 ] , [ 9, 0, 0, 9 ] , [ 11, 6, 10, 7 ] , [ 13, 8, 8, 5 ] , [ 13, 12, 4, 5 ] , [ 15, 8, 8, 15 ] ], index:=24>;
+CPlistprimepower["16F"]:= rec<CongSubgroupprimepower | N:=16,  label:="16F", gens:=[ [ 1, 8, 8, 1 ] , [ 7, 0, 8, 7 ] , [ 9, 0, 8, 9 ] , [ 9, 1, 5, 6 ] , [ 9, 4, 4, 9 ] , [ 13, 0, 12, 5 ] , [ 13, 8, 4, 5 ] , [ 15, 8, 8, 15 ]  ], index:=32>;
+CPlistprimepower["16G"]:= rec<CongSubgroupprimepower | N:=16,  label:="16G", gens:=[[ 1, 4, 0, 1 ] , [ 1, 6, 0, 1 ] , [ 1, 8, 0, 1 ] , [ 3, 12, 8, 11 ] , [ 9, 0, 0, 9 ] , [ 9, 8, 0, 9 ] , [ 13, 0, 8, 5 ]  ], index:=48>;
+CPlistprimepower["16H"]:= rec<CongSubgroupprimepower | N:=16,  label:="16H", gens:=[[ 1, 8, 8, 1 ] , [ 2, 1, 15, 0 ] , [ 9, 8, 8, 9 ] , [ 13, 4, 12, 5 ] , [ 13, 6, 10, 1 ] , [ 13, 12, 4, 5 ] , [ 15, 6, 10, 3 ] ], index:=48>;
+
+
+CPlistprimepower["32A"]:= rec<CongSubgroupprimepower | N:=32,  label:="32A", gens:=[[ 1, 16, 16, 1 ] , [ 1, 28, 28, 17 ] , [ 5, 20, 12, 29 ] , [ 9, 8, 24, 25 ] , [ 9, 24, 8, 25 ] , [ 11, 26, 6, 23 ] , [ 13, 4, 12, 21 ] , [ 17, 10, 6, 13 ] , [ 17, 16, 16, 17 ] , [ 19, 26, 22, 15 ] , [ 23, 10, 30, 27 ] , [ 26, 29, 27, 8 ]  ], index:=48>;
+
+
+// For a congruence subgroup in our list, we compute the upper bound on number of cocycles as mentioned in lemma 5.1
+
+keys:=[k: k in Keys(CPlistprimepower)];
+level:=[CPlistprimepower[k]`N:k in keys];
+ParallelSort(~level,~keys);
+
+for k in keys do;
+    if k eq "1A" then continue; end if;
+
+    Gamma:=CPlistprimepower[k];    SL2:=SL(2,Integers(Gamma`N));
+    H:=sub<SL2|[g:g in Gamma`gens]>;
+    N:= Normalizer(SL2,H);
+    N1:=quo<N|H>;
+    s:=[];
+    for n in N1 do;
+        x:=0;
+        t:=Factorisation(Order(n));
+        // checking if for every p|Order(n) does p|N
+        for p in t do;
+            if Gamma`N mod p[1] eq 0 then x:=x+1; end if;
+        end for;
+        if x eq #t then s:=s cat [Order(n)];end if;
+    end for;
+     Gamma`b:=Lcm(s) ;
+    
+   
+    if Gamma`N mod 2 eq 0 and Gamma`N mod 4 ne 0 then Gamma`N:=4*Gamma`N;end if;
+    if Gamma`N mod 2 eq 0 and Gamma`N mod 4 eq 0 and Gamma`N mod 8 ne 0 then Gamma`N:=2*Gamma`N;end if;
+    CPlistprimepower[k]:=Gamma;
+    
+ end for;   
+ 
+// For a congruence subgroup Gamma, we now compute X_G as a conic
+where G \intersect \SL_2(Z) is conjugate to Gamma and X_G is defined over a number field other than Q
+
+for k in keys do;
+    
+     if k eq "1A" then continue; end if;
+   //k;
+	Write("temp",k);
+   Gamma:=CPlistprimepower[k];
+   //Gamma`b;
+Write("temp","b");Write("temp",Gamma`b);
+    N := Gamma`N; 
+    L := CyclotomicField(N);
+    L1:=CyclotomicField(N*Gamma`b);
+    T:=Subfields(L);
+    for K in T do;
+	//K;
+	Write("temp","...........................................................................");
+	Write("temp",K);
+    G,iota,sigma:=AutomorphismGroup(L1,K[1]);if #G eq 1 then continue;end if; 
+	
+    S<t> := FunctionField(L1); 
+    J := CPlist[k]`J;
+    J := S!J;
+	//J;
+	Write("temp","J_Gamma");Write("temp",J);
+    R := MatrixRing(L1,2); 
+    action := hom< G -> Aut(R) | g :-> iso< R -> R | n :-> [sigma(g)(n[1,1]),sigma(g)(n[1,2]),sigma(g)(n[2,1]),sigma(g)(n[2,2])] > >;
+    if IsCyclic(G) eq true then  
+     
+    Ggens:=Generators(G);for l in Ggens do; if Order(l) eq #G then g:=l;break;end if;end for;
+    C := AssociativeArray(); 
+    n:=1; 
+	if SameRationalParametrization(SigmaJ(J,g,L1,K[1]),J,L1) eq false then 
+            C[g]:={}; 
+            n:=0; 
+        else 
+            _,C[g]:=SameRationalParametrization(SigmaJ(J,g,L1,K[1]),J,L1);
+            n:=n*#C[g]; 
+        end if; 
+
+       
+    
+    if n eq 0 then  
+	continue;
+    end if; 
+
+    M :={}; 
+
+    while #M ne n do; 
+
+        xi :=[g->S!Random(C[g])]; 
+        M:= M join {xi}; 
+
+    end while; 
+    
+    Setcoc:={}; 
+
+    m1 := map< MatrixRing(L1,2) -> MatrixRing(L1,3) | n :-> (1/Determinant(n))*Matrix(3,3,[n[1,1]^2,2*n[1,1]*n[1,2],n[1,2]^2,n[1,1]*n[2,1],n[1,1]*n[2,2]+n[1,2]*n[2,1],n[1,2]*n[2,2],n[2,1]^2,2*n[2,1]*n[2,2],n[2,2]^2])>;  
+
+   
+
+     for m in M do; 
+	
+        xi0:=AssociativeArray(); 
+        for i in [1..Order(g)] do; 
+            if i eq 1 then 
+
+                xi0[1]:=R![Evaluate(Numerator(m[1][2])-Evaluate(Numerator(m[1][2]),0),1),Evaluate(Numerator(m[1][2]),0),Evaluate(Denominator(m[1][2])-Evaluate(Denominator(m[1][2]),0),1),Evaluate(Denominator(m[1][2]),0)]; 
+
+            else 
+
+                xi0[i]:=R!((xi0[1])*(action(g)(xi0[i-1]))); 
+            end if; 
+
+         end for; 
+
+        xi:=map<G-> MatrixRing(L1,3) |[(g)^i-> m1(xi0[i]):i in [1..Order(g)]]>; 
+        if check(xi,L1,K[1]) eq true then  
+            Setcoc:=Setcoc join {xi}; 
+         end if; 
+
+    end for; 
+    countercoc:=0;
+    for phi in Setcoc do;
+        countercoc:=countercoc+1;
+        A := H90(3,L1,K[1],G,sigma,phi);  
+        D := Matrix(3,3,[0,0,-1/2,0,1,0,-1/2,0,0]); // this is the matrix corresponding to y^2-xz 
+        Q0 := Conic(D); 
+        Q,_ := Conic(Transpose(A^(-1))*D*A^(-1)); 
+        Q := ChangeRing(Q,K[1]);  
+        if HasRationalPoint(Q) eq false then 
+		//print "A nontrivial cocycle";
+		Write("temp", "A nontrivial cocycle");
+            continue; 
+        else
+                //print "A trivial cocycle";
+		Write("temp", " A trivial cocycle");
+		Q := ChangeRing(Q,L); 
+		Write("temp",Q);Write("temp",A);
+          
+         end if;
+     end for;
+     
+	else
+
+	 Ggens:={};
+	 for l in Generators(G) do; 
+		if Order(l) eq #G/2 then g1:=l;Ggens:=Ggens join {g1};break;end if;
+	 end for;
+	for l in Generators(G) do;
+		if Order(l) eq 2 and l notin sub<G|g1> then g2:=l;Ggens:=Ggens join {g2};break;end if;
+	end for;
+	C := AssociativeArray(); 
+
+    n:=1; 
+
+    for g in Ggens do; 
+
+        if SameRationalParametrization(SigmaJ(J,g,L1,K[1]),J,L1) eq false then 
+
+         
+
+            C[g]:={}; 
+
+            n:=0; 
+
+        else 
+
+            _,C[g]:=SameRationalParametrization(SigmaJ(J,g,L1,K[1]),J,L1); 
+
+            n:=n*#C[g]; 
+
+        end if; 
+
+  
+
+    end for; 
+
+ 
+
+    if n eq 0 then  
+
+       
+        
+        
+        continue;
+        
+
+    end if; 
+
+    M :={}; 
+
+    while #M ne n do; 
+
+        xi :=[g->S!Random(C[g]):g in Ggens]; 
+
+        M:= M join {xi}; 
+
+    end while; 
+
+ 
+
+    Setcoc:={}; 
+
+    m1 := map< MatrixRing(L1,2) -> MatrixRing(L1,3) | n :-> (1/Determinant(n))*Matrix(3,3,[n[1,1]^2,2*n[1,1]*n[1,2],n[1,2]^2,n[1,1]*n[2,1],n[1,1]*n[2,2]+n[1,2]*n[2,1],n[1,2]*n[2,2],n[2,1]^2,2*n[2,1]*n[2,2],n[2,2]^2])>;  
+    for m in M do; 
+
+    g1:=m[1][1]; 
+
+    g2:=m[2][1]; 
+
+    xi0:=AssociativeArray(); 
+
+    for i in [1..Order(g1)] do; 
+
+        if i eq 1 then 
+
+                xi0[g1]:=R![Evaluate(Numerator(m[1][2])-Evaluate(Numerator(m[1][2]),0),1),Evaluate(Numerator(m[1][2]),0),Evaluate(Denominator(m[1][2])-Evaluate(Denominator(m[1][2]),0),1),Evaluate(Denominator(m[1][2]),0)]; 
+
+            else 
+
+                xi0[(g1)^i]:=R!((xi0[g1])*(action(g1)(xi0[(g1)^(i-1)]))); 
+
+ 
+
+         end if; 
+
+             
+
+      end for; 
+
+ 
+
+    for j in [1..Order(g2)] do; 
+
+        if j eq 1 then 
+
+                xi0[g2]:=R![Evaluate(Numerator(m[2][2])-Evaluate(Numerator(m[2][2]),0),1),Evaluate(Numerator(m[2][2]),0),Evaluate(Denominator(m[2][2])-Evaluate(Denominator(m[2][2]),0),1),Evaluate(Denominator(m[2][2]),0)]; 
+
+            else 
+
+                xi0[(g2)^j]:=R!((xi0[g2])*(action(g2)(xi0[(g2)^(j-1)]))); 
+
+ 
+
+         end if; 
+
+             
+
+      end for; 
+
+ 
+
+    for i in [1..Order(g1)] do; 
+
+        for j in [1..Order(g2)] do; 
+
+            xi0[((g1)^i)*(g2^j)]:=R!((xi0[(g1)^i])*(action((g1)^i)(xi0[(g2)^(j)]))); 
+
+         end for; 
+
+    end for; 
+
+ 
+
+xi:=map<G->MatrixRing(L1,3)|[g ->m1(xi0[g]) : g in G]>; 
+
+                if check(xi,L1,K[1]) eq true then  
+
+                    Setcoc:=Setcoc join {xi}; 
+
+                end if; 
+
+end for; 
+	
+ countercoc:=0;
+    for phi in Setcoc do;
+        countercoc:=countercoc+1;
+        A := H90(3,L1,K[1],G,sigma,phi);  
+        D := Matrix(3,3,[0,0,-1/2,0,1,0,-1/2,0,0]); // this is the matrix corresponding to y^2-xz 
+        Q0 := Conic(D); 
+        Q,_ := Conic(Transpose(A^(-1))*D*A^(-1)); 
+        Q := ChangeRing(Q,K[1]);  
+        if HasRationalPoint(Q) eq false then 
+		//print "A nontrivial cocycle";
+		Write("temp", "A nontrivial cocycle");
+            continue; 
+        else
+            //print "A trivial cocycle";
+            Write("temp", " A trivial cocycle");
+	    Q := ChangeRing(Q,L); 
+	    Write("temp",Q);Write("temp",A);
+                
+	
+	
+end if;	
+end for;
+ end if;
+end for;
+end for;
