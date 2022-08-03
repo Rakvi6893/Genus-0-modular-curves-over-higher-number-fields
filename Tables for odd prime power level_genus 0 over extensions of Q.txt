@@ -4,7 +4,7 @@ Data for Genus 0 Modular Curves over higher number fields
 
 Base field K=K_3
 
-Label		C								J(t)
+Label		C								\pi(t)
 
 3C-3A           Id								(t^6 + 18*zeta_3*t^5 + (-27*zeta_3 - 27)*t^4 - 756*t^3 - 729*zeta_3*t^2 +(-13122*zeta_3 - 13122)*t - 19683)/(t^3 + 18*zeta_3*t^2 + (-108*zeta_3 - 108)*t + 216)
 
